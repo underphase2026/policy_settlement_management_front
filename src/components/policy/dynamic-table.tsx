@@ -1,4 +1,3 @@
-import React from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 
@@ -27,9 +26,35 @@ export function DynamicTable({ data, className }: DynamicTableProps) {
       )
     }
 
+    // 데이터가 배열인데 요소가 객체가 아닌 프리미티브(문자열 등)인 경우
+    if (data.length > 0 && typeof data[0] !== "object") {
+      return (
+        <div className={cn("overflow-x-auto rounded-md border border-border shadow-sm", className)}>
+          <Table>
+            <TableHeader className="bg-muted/80 sticky top-0 z-10">
+              <TableRow>
+                <TableHead className="font-extrabold text-foreground whitespace-nowrap border-r border-border/50">
+                  내용
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((item: any, rowIndex: number) => (
+                <TableRow key={rowIndex} className="transition-colors border-b bg-background hover:bg-muted/30">
+                  <TableCell className="text-sm border-r border-border/30 last:border-0 py-3">
+                    {String(item)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )
+    }
+
     // 모든 행을 순회하며 존재하는 모든 고유 키(Unique Keys)를 추출
     const headers = Array.from(
-      new Set(data.flatMap((obj: any) => Object.keys(obj)))
+      new Set(data.flatMap((obj: any) => (typeof obj === "object" && obj !== null ? Object.keys(obj) : [])))
     )
 
     return (

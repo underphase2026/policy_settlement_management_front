@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef } from "react"
-import { Upload, FileImage, FileSpreadsheet, X } from "lucide-react"
+import { Upload, FileImage, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 export interface UploadedFile {
   id: string
   name: string
-  type: "image" | "excel"
+  type: "image"
   size: number
   preview?: string
   file: File // API 분석을 위한 원본 파일 객체
@@ -38,17 +38,13 @@ export function FileUploadDropzone({
       const newFiles: UploadedFile[] = []
       Array.from(fileList).forEach((file) => {
         const isImage = file.type.startsWith("image/")
-        const isExcel =
-          file.name.endsWith(".xlsx") ||
-          file.name.endsWith(".csv") ||
-          file.type.includes("spreadsheet")
-        if (isImage || isExcel) {
+        if (isImage) {
           newFiles.push({
             id: crypto.randomUUID(),
             name: file.name,
-            type: isImage ? "image" : "excel",
+            type: "image",
             size: file.size,
-            preview: isImage ? URL.createObjectURL(file) : undefined,
+            preview: URL.createObjectURL(file),
             file,
           })
         }
@@ -115,14 +111,14 @@ export function FileUploadDropzone({
               정책표 파일을 드래그하거나 클릭하여 업로드
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              이미지(.jpg, .png) 또는 엑셀(.xlsx, .csv) 파일 지원
+              이미지(.jpg, .png, .webp, .gif) — 정책 분석 API는 이미지만 처리합니다
             </p>
           </div>
           <input
             ref={inputRef}
             type="file"
             className="hidden"
-            accept=".jpg,.jpeg,.png,.xlsx,.csv"
+            accept=".jpg,.jpeg,.png,.webp,.gif,image/*"
             multiple
             onChange={(e) => {
               if (e.target.files) handleFiles(e.target.files)
@@ -144,11 +140,7 @@ export function FileUploadDropzone({
                   className="flex items-center gap-3 rounded-lg border border-border bg-accent/30 p-3"
                 >
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10">
-                    {file.type === "image" ? (
-                      <FileImage className="size-4 text-primary" />
-                    ) : (
-                      <FileSpreadsheet className="size-4 text-primary" />
-                    )}
+                    <FileImage className="size-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-foreground truncate">
@@ -162,7 +154,7 @@ export function FileUploadDropzone({
                     variant="secondary"
                     className="shrink-0 text-xs"
                   >
-                    {file.type === "image" ? "이미지" : "엑셀"}
+                    이미지
                   </Badge>
                   <button
                     onClick={(e) => {

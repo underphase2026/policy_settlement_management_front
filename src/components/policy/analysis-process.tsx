@@ -92,7 +92,7 @@ export function AnalysisProcess({
           <div className="flex items-center justify-between text-xs text-muted-foreground font-medium">
             <span>
               {status === "idle" && "분석 대기 중"}
-              {status === "analyzing" && "요금제별 데이터를 순차적으로 분석 중입니다. (약 10~15초 소요)"}
+              {status === "analyzing" && "요금제별 데이터를 동시에 분석 중입니다. (약 5~10초 소요)"}
               {status === "complete" && "분석 완료"}
               {status === "error" && "분석 오류 발생"}
             </span>

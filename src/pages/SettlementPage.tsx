@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FileDown, RefreshCcw } from "lucide-react"
+import { RefreshCcw } from "lucide-react"
 
 import { SettlementSummaryCards } from "@/components/settlement/summary-cards"
-import { SettlementFilters, type FilterState, type SettlementStatus } from "@/components/settlement/settlement-filters"
+import { SettlementFilters, type FilterState } from "@/components/settlement/settlement-filters"
 import { ReconciliationTable } from "@/components/settlement/reconciliation-table"
 import { SettlementDetailModal } from "@/components/settlement/detail-modal"
 import { ExportButton } from "@/components/settlement/export-button"
